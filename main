@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校园昆虫分类图鉴</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        :root {
+            --primary: #2c3e50;      /* 深蓝色 */
+            --primary-dark: #1a252f; /* 深蓝-黑 */
+            --secondary: #f39c12;    /* 黄色 */
+            --accent: #8e44ad;       /* 紫色/绛红 */
+            --light: #ecf0f1;        /* 浅灰 */
+            --dark: #2c3e50;         /* 深蓝 */
+            --gray: #7f8c8d;         /* 灰色 */
+            --light-gray: #bdc3c7;   /* 浅灰色 */
+            --card-bg: #ffffff;      /* 卡片背景 */
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #e0f7fa 0%, #e3f2fd 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 2rem;
+        }
+        
+        /* 头部样式 */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 2.2rem;
+            color: var(--secondary);
+        }
+        
+        .logo h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: block;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* 标题区域 */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), url('https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 5rem 1rem;
+            margin: 2rem 0;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+        }
+        
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+        }
+        
+        /* 分类学页面 */
+        .taxonomy-view {
+            display: none; /* 默认隐藏 */
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.8rem;
+            color: var(--primary);
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid var(--accent);
+        }
+        
+        .section-title i {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+        
+        /* 分类学网格 */
+        .taxonomy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 3rem;
+        }
+        
+        .taxonomy-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            cursor: pointer;
+            border: 2px solid var(--accent);
+        }
+        
+        .taxonomy-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(142, 68, 173, 0.3);
+        }
+        
+        .taxonomy-icon {
+            height: 180px;
+            background: linear-gradient(135deg, var(--accent), #6c3483);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 5rem;
+        }
+        
+        .taxonomy-info {
+            padding: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .taxonomy-info h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+        
+        .insect-count {
+            font-style: italic;
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        /* 昆虫卡片网格 */
+        .insect-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 3rem;
+        }
+        
+        .insect-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: 2px solid var(--primary);
+        }
+        
+        .insect-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(44, 62, 80, 0.3);
+        }
+        
+        .insect-img-container {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .insect-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .insect-card:hover .insect-img {
+            transform: scale(1.05);
+        }
+        
+        .insect-info {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .insect-info h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+        
+        .insect-latin {
+            font-style: italic;
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .taxonomy-details {
+            background-color: #f5eef8;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--accent);
+        }
+        
+        .taxonomy-details p {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+            display: flex;
+        }
+        
+        .taxonomy-details p span:first-child {
+            font-weight: 600;
+            min-width: 60px;
+            display: inline-block;
+            color: var(--accent);
+        }
+        
+        .location-info {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .commonness {
+            display: flex;
+            gap: 3px;
+        }
+        
+        .commonness i {
+            color: var(--secondary);
+        }
+        
+        /* 加载更多按钮 */
+        .load-more {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .load-more-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(142, 68, 173, 0.3);
+        }
+        
+        .load-more-btn:hover {
+            background: #7d3c98;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(142, 68, 173, 0.4);
+        }
+        
+        .no-more-btn {
+            background: var(--gray);
+            cursor: not-allowed;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav a {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .hero {
+                padding: 3rem 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .insect-grid, .taxonomy-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .insect-grid, .taxonomy-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .no-insects {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+        
+        .stats-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 10px;
+            min-width: 150px;
+        }
+        
+        .stat-card:nth-child(1) {
+            background-color: rgba(44, 62, 80, 0.1);
+            border: 2px solid var(--primary);
+        }
+        
+        .stat-card:nth-child(2) {
+            background-color: rgba(142, 68, 173, 0.1);
+            border: 2px solid var(--accent);
+        }
+        
+        .stat-card:nth-child(3) {
+            background-color: rgba(243, 156, 18, 0.1);
+            border: 2px solid var(--secondary);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部导航 -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-bug"></i>
+                <h1>校园昆虫分类图鉴</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" id="random-link">随机浏览</a></li>
+                    <li><a href="#" id="taxonomy-link">分类学浏览</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- 标题区域 -->
+        <section class="hero">
+            <h2>探索校园昆虫多样性</h2>
+            <p>按分类学系统整理校园内发现的各类昆虫，了解它们的特征与分布</p>
+        </section>
+
+        <!-- 统计数据 -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value" id="insect-count">0</div>
+                <div class="stat-label">种昆虫纲的种</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="order-count">0</div>
+                <div class="stat-label">个昆虫纲的目</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="family-count">0</div>
+                <div class="stat-label"></div>
+            </div>
+        </div>
+
+        <!-- 随机浏览视图 -->
+        <div id="random-view">
+            <div class="section-title">
+                <i class="fas fa-random"></i>
+                <h2>随机浏览</h2>
+            </div>
+            
+            <div class="insect-grid" id="random-insects">
+                <!-- 随机昆虫卡片将通过JS动态加载 -->
+            </div>
+            
+            <div class="load-more">
+                <button class="load-more-btn" id="load-more">加载更多昆虫</button>
+            </div>
+        </div>
+        
+        <!-- 分类学视图 -->
+        <div class="taxonomy-view" id="taxonomy-view">
+            <div class="section-title">
+                <i class="fas fa-sitemap"></i>
+                <h2>按照分类学列举</h2>
+            </div>
+            
+            <div class="taxonomy-grid" id="taxonomy-grid">
+                <!-- 分类学卡片将通过JS动态加载 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const insects = [
+            {
+                name: "十三星瓢虫",
+                latin: "Hippodamia tredecimpunctata",
+                image: "imagines/d62a6059252dd42acb815b52033b5bb5c8eab8bb.jpeg",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "鞘翅目 Coleoptera",
+                    family: "瓢虫科 Coccinellidae"
+                },
+                location: "5-8月花坛（此为网图，详细图片请自查中国昆虫网等网站或图鉴，涉及版权无法引用）",
+                commonness: 2
+            },
+            {
+                name: "玉带凤蝶",
+                latin: "Papilio polytes",
+                image: "imagines/u=3058038902,2971386152&fm=3074&app=3074&f=JPEG.jpeg",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "鳞翅目 Lepidoptera",
+                    family: "凤蝶科 Papilionidae"
+                },
+                location: "图书馆门口三叶草丛中，开花时",
+                commonness: 3
+            },
+            {
+                name: "中华蜜蜂",
+                latin: "Apis cerana",
+                image: "imagines/8ad4b31c8701a18b04bc89a1c22380072938fea1.jpeg@f_auto.webp",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "膜翅目 Hymenoptera",
+                    family: "蜜蜂科 Apidae"
+                },
+                location: "崇文楼望星楼中间杉树下方三叶草处常见（网图，阳台蹲着拍的太糊了）",
+                commonness: 1
+            },
+            {
+                name: "意大利蜜蜂",
+                latin: "Apis mellifera ligustica",
+                image: "imagines/023b5bb5c9ea15ced8aebf8eb6003af33b87b2f1.jpeg",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "膜翅目 Hymenoptera",
+                    family: "蜜蜂科 Apidae"
+                },
+                location: "崇文楼望星楼中间杉树下方三叶草处常见，教室偶见",
+                commonness: 2
+            },
+            {
+                name: "中华大刀螳",
+                latin: "Tenodera sinensis",
+                image: "imagines/WechatIMG28.jpg",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "螳螂目 Mantodea",
+                    family: "螳科 Mantidae"
+                },
+                location: "仅一只在图书馆后绿地",
+                commonness: 5
+            },
+            {
+                name: "黑蚱蝉",
+                latin: "Cryptotympana atrata",
+                image: "imagines/915dda0f8f379e9bc1a5ad0fac7fcd09.png",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "半翅目 Hemiptera",
+                    family: "蝉科 Cicadidae"
+                },
+                location: "图书馆后树林、树干（网图，树上没发抓）",
+                commonness: 1
+            },
+            {
+                name: "大草蛉",
+                latin: "Chrysopa pallens",
+                image: "imagines/daaolin .jpeg",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "脉翅目 Neuroptera",
+                    family: "草蛉科 Chrysopidae"
+                },
+                location: "崇文楼一楼厕所，5，6月份晚上（网图，在天花板上没法抓）",
+                commonness: 2
+            },
+            {
+                name: "黄蜻",
+                latin: "Pantala flavescens",
+                image: "imagines/u=2469350976,1897866761&fm=224&app=112&f=JPEG.jpeg",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "蜻蜓目 Odonata",
+                    family: "蜻科 Libellulidae"
+                },
+                location: "夏季6月左右雨前的图书馆前广场（网图，没抓到）",
+                commonness: 4
+            },
+            {
+                name: "四斑弓背蚁",
+                latin: "Lasius niger",
+                image: "imagines/u=3790937510,3455519666&fm=224&app=112&f=JPEG.jpeg",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "膜翅目 Hymenoptera",
+                    family: "蚁科 Formicidae"
+                },
+                location: "仅一只婚飞蚁后，6月傍晚吃完晚饭返回崇文楼于图书馆靠崇文楼一端发现",
+                commonness: 5
+            },
+            {
+                name: "蟋蟀",
+                latin: "Gryllidae",
+                image: "imagines/10.png",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "直翅目 Orthoptera",
+                    family: "蟋蟀科 Gryllidae"
+                },
+                location: "夏天一楼教室地板，图中为示意家蟋蟀",
+                commonness: 2
+            },
+            {
+                name: "家蝇",
+                latin: "Musca domestica",
+                image: "imagines/u=3826494538,268401179&fm=30&app=106&f=JPEG.jpeg",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "双翅目 Diptera",
+                    family: "蝇科 Muscidae"
+                },
+                location: "垃圾桶",
+                commonness: 1
+            },
+			{
+			    name: "双斑比栉大蚊",
+			    latin: "Pselliophora bifascipennis",
+			    image: "imagines/12.png",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "双翅目 Diptera",
+			        family: "大蚊科 Tipulidae"
+			    },
+			    location: "操场见到过两只，一只扁了一只活着，一夜后死去，即为图中标本",
+			    commonness: 5
+			},
+            {
+                name: "黑毛蚁",
+                latin: "Lasius niger",
+                image: "imagines/1.png",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "膜翅目 Hymenoptera",
+                    family: "蚁科 Formicidae"
+                },
+                location: "到处都是，5，6月一只新后恰好进入教室被采集",
+                commonness: 1
+            },
+            {
+                name: "宽节大头蚁（疑似）",
+                latin: "Pheidole nodus",
+                image: "imagines/4.png",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "膜翅目 Hymenoptera",
+                    family: "蚁科 Formicidae"
+                },
+                location: "到处都是",
+                commonness: 1
+            },
+            {
+                name: "铺道蚁（图中疑似为草地铺道）",
+                latin: "Tetramorium",
+                image: "imagines/b62aed13a1293738582fe372a0d8071d24ced79c.jpg",
+                taxonomy: {
+                    kingdom: "动物界 Animalia",
+                    phylum: "节肢动物门 Arthropoda",
+                    class: "昆虫纲 Insecta",
+                    order: "膜翅目 Hymenoptera",
+                    family: "蚁科 Formicidae"
+                },
+                location: "到处都是，群架爱好者",
+                commonness: 1
+            },
+			{
+			    name: "隐翅虫",
+			    latin: "Staphylinidae",
+			    image: "imagines/11.png",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "鞘翅目 Coleoptera",
+			        family: "隐翅虫科 Staphylinidae"
+			    },
+			    location: "晚自习开灯有机率刷新，偶尔有毒隐翅虫属刷新，不过大部分无毒",
+			    commonness: 3
+			},
+			
+			{
+			    name: "叩甲",
+			    latin: "Elateroidea",
+			    image: "imagines/fab7ee142d84ad07af5ff21a06d8eefe.png",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "鞘翅目 Coleoptera",
+			        family: "叩甲总科 Elateroidea"
+			    },
+			    location: "少见，在图书馆后刨坑概率刷新幼虫，没见过成虫",
+			    commonness: 4
+			},
+			
+			{
+			    name: "华星天牛",
+			    latin: "Anoplophora chinensis",
+			    image: "imagines/71b27d75ly1httacxv9urj20ir0p0tbz.jpg",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "鞘翅目 Coleoptera",
+			        family: "天牛科 Cerambycidae"
+			    },
+			    location: "6月校门口右边梧桐树，主干道上刷新，主干道上多为扁的，可以拿着玩",
+			    commonness: 3
+			},
+			{
+			    name: "金龟子",
+			    latin: "Scarabaeoidea",
+			    image: "imagines/8.png",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "鞘翅目 Coleoptera",
+			        family: "金龟子 Scarabaeoidea"
+			    },
+			    location: "主干道操场刷新，捡到过只纯金的但是太扁了，没法鉴定了",
+			    commonness: 4
+			},
+			
+			{
+			    name: "蚜虫",
+			    latin: "Aphidoidea",
+			    image: "imagines/3f97b35c099db7a9a87662e12f33206b.png",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "半翅目 Hemiptera",
+			        family: "蚜总科 Aphidoidea"
+			    },
+			    location: "教室门口的菊花从中，图片中蚂蚁为铺道蚁",
+			    commonness: 1
+			},
+			
+			{
+			    name: "潜叶蝇",
+			    latin: "Agromyzidae",
+			    image: "imagines/3830bf3139add4bacf1a32e773170d7a.png",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "双翅目 Diptera",
+			        family: "潜蝇科 Agromyzidae"
+			    },
+			    location: "崇文楼花坛中菊花叶子中",
+			    commonness: 2
+			},
+			
+			{
+			    name: "黄脚胡蜂",
+			    latin: "Vespa velutina nigrithorax",
+			    image: "imagines/src=http---image109.360doc.com-DownloadImg-2024-09-0112-288026545_1_20240901121754439.jpeg&refer=http---image109.360doc.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto.webp",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "膜翅目 Hymenoptera",
+			        family: "胡蜂科 Vespidae"
+			    },
+			    location: "随机刷新，墨胸胡蜂亚种",
+			    commonness: 1
+			},
+			
+			{
+			    name: "胡蜂",
+			    latin: "Vespa velutina ？？？",
+			    image: "imagines/2.png",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "膜翅目 Hymenoptera",
+			        family: "胡蜂科 Vespidae"
+			    },
+			    location: "教室随机出现尚且未知何种，疑似墨胸胡蜂某亚种",
+			    commonness: 4
+			},
+			
+	        {
+			    name: "肿腿蜂",
+			    latin: "Bethylidae",
+			    image: "imagines/v2-b34be56ecb070f16ec07e3ba0f7572a1_r.jpg",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "膜翅目 Hymenoptera",
+			        family: "肿腿蜂科 Bethylidae"
+			    },
+			    location: "春夏交界时出现，蜇人剧痛（网图，忘记拍照了）",
+			    commonness: 2
+			},
+			
+			{
+			    name: "黑带食蚜蝇",
+			    latin: "Episyrphus balteatus",
+			    image: "imagines/heidai.png",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "双翅目 Diptera",
+			        family: "食蚜蝇科 Syrphidae"
+			    },
+			    location: "蚜虫多处（图中泡褪色了）",
+			    commonness: 2
+			},
+			
+			{
+			    name: "形似天牛甲虫",
+			    latin: "Cerambycidae (形态相似种)",
+			    image: "imagines/7.png",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "鞘翅目 Coleoptera",
+			        family: "天牛科 Cerambycidae"
+			    },
+			    location: "操场（并无规律）",
+			    commonness: 4
+			},
+			
+			{
+			    name: "赤眼蜂",
+			    latin: "Trichogrammatidae",
+			    image: "imagines/u=4143737704,1798405445&fm=253&app=138&f=JPEG.jpeg",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "膜翅目 Hymenoptera",
+			        family: "赤眼蜂科 Trichogrammatidae"
+			    },
+			    location: "菊花丛中蚜虫多处",
+			    commonness: 1
+			},
+			
+			{
+			    name: "蚜茧蜂",
+			    latin: "Asaphes vulgaris Walker",
+			    image: "imagines/u=3736717747,1430031233&fm=253&app=138&f=JPEG.jpeg",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "膜翅目 Hymenoptera",
+			        family: "姬蜂总科 ichneumon"
+			    },
+			    location: "崇文楼门口蚜虫扎堆处",
+			    commonness: 4
+			},
+			
+			{
+			    name: "黑胸散白蚁",
+			    latin: "Reticulitermes chinensis Snyder",
+			    image: "imagines/e4dcc30b958614cabae1f1c46c5d5bbe1c2eac43.jpg",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "蜚蠊目 Blattaria",
+			        family: "白蚁科 Termitidae"
+			    },
+			    location: "5月份月考时在崇文楼分飞，主要集中在崇文楼阶梯教室边上水房处集中",
+			    commonness: 4
+			},
+			
+			{
+			    name: "黑翅土白蚁",
+			    latin: "Odontotermes formosanus",
+			    image: "imagines/500fd9f9d72a605954f103c02034349b023bba03.jpeg",
+			    taxonomy: {
+			        kingdom: "动物界 Animalia",
+			        phylum: "节肢动物门 Arthropoda",
+			        class: "昆虫纲 Insecta",
+			        order: "蜚蠊目 Blattaria",
+			        family: "白蚁科 Termitidae"
+			    },
+			    location: "6月份台风于操场发现一新后疑似刮过来的",
+			    commonness: 4
+			},
+			
+			
+			
+			
+				
+        ];
+
+        // 昆虫目分类（初始数量为0，将在初始化时计算）
+        const orders = [
+            { name: "鞘翅目", icon: "dragon", count: 0, desc: "甲虫类昆虫，前翅为角质鞘翅" },
+            { name: "鳞翅目", icon: "butterfly", count: 0, desc: "蝴蝶和蛾类，翅膀覆盖鳞片" },
+            { name: "膜翅目", icon: "bee", count: 0, desc: "蜂类和蚁类，具有膜质翅膀" },
+            { name: "双翅目", icon: "mosquito", count: 0, desc: "蚊、蝇、虻等，只有一对翅膀和平衡棒" },
+            { name: "半翅目", icon: "bug", count: 0, desc: "蝉、蚜虫、椿象等，刺吸式口器" },
+            { name: "直翅目", icon: "locust", count: 0, desc: "蝗虫、蟋蟀、螽斯等" },
+            { name: "蜻蜓目", icon: "dragonfly", count: 0, desc: "蜻蜓和豆娘等" },
+            { name: "螳螂目", icon: "praying-hands", count: 0, desc: "螳螂，捕食性昆虫" },
+            { name: "蜚蠊目", icon: "cockroach", count: 0, desc: "蟑螂，适应性强" },
+            { name: "等翅目", icon: "termite", count: 0, desc: "白蚁，社会性昆虫" },
+            { name: "革翅目", icon: "earwig", count: 0, desc: "蠼螋，尾端有尾铗" },
+            { name: "脉翅目", icon: "lacewing", count: 0, desc: "草蛉、蚁蛉等，捕食性昆虫" }
+        ];
+
+        // DOM 元素
+        const randomView = document.getElementById('random-view');
+        const taxonomyView = document.getElementById('taxonomy-view');
+        const randomLink = document.getElementById('random-link');
+        const taxonomyLink = document.getElementById('taxonomy-link');
+        const randomInsects = document.getElementById('random-insects');
+        const taxonomyGrid = document.getElementById('taxonomy-grid');
+        const loadMoreBtn = document.getElementById('load-more');
+        const insectCount = document.getElementById('insect-count');
+        const orderCount = document.getElementById('order-count');
+        const familyCount = document.getElementById('family-count');
+
+        // 状态管理
+        let currentMode = 'random'; // 'random' 或 'order'
+        let currentOrder = null;
+        let displayedOrderInsects = [];
+
+        // 初始化函数：计算每个目的昆虫数量
+        function calculateOrderCounts() {
+            orders.forEach(order => {
+                order.count = insects.filter(insect => 
+                    insect.taxonomy.order.includes(order.name)
+                ).length;
+            });
+        }
+
+        // 计算统计信息
+        function calculateStatistics() {
+            // 昆虫种类总数
+            insectCount.textContent = insects.length;
+            
+            // 实际存在的目数量
+            const activeOrders = orders.filter(order => order.count > 0);
+            orderCount.textContent = activeOrders.length;
+            
+            // 科数量
+            const families = new Set();
+            insects.forEach(insect => families.add(insect.taxonomy.family));
+            familyCount.textContent = families.size;
+        }
+
+        // 显示随机昆虫卡片
+        function displayRandomInsects(count) {
+            for (let i = 0; i < count; i++) {
+                const insect = getRandomInsect();
+                const insectCard = createInsectCard(insect);
+                randomInsects.appendChild(insectCard);
+                
+                // 添加淡入动画
+                setTimeout(() => {
+                    insectCard.classList.add('fade-in');
+                }, 100);
+            }
+        }
+
+        // 获取随机昆虫
+        function getRandomInsect() {
+            return insects[Math.floor(Math.random() * insects.length)];
+        }
+
+        // 创建昆虫卡片
+        function createInsectCard(insect) {
+            const card = document.createElement('div');
+            card.className = 'insect-card';
+            card.innerHTML = `
+                <div class="insect-img-container">
+                    <img src="${insect.image}" alt="${insect.name}" class="insect-img">
+                </div>
+                <div class="insect-info">
+                    <h3>${insect.name}</h3>
+                    <p class="insect-latin">${insect.latin}</p>
+                    
+                    <div class="taxonomy-details">
+                        <p><span>界:</span>${insect.taxonomy.kingdom}</p>
+                        <p><span>门:</span>${insect.taxonomy.phylum}</p>
+                        <p><span>纲:</span>${insect.taxonomy.class}</p>
+                        <p><span>目:</span>${insect.taxonomy.order}</p>
+                        <p><span>科:</span>${insect.taxonomy.family}</p>
+                    </div>
+                    
+                    <div class="location-info">
+                        <div class="location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${insect.location}</span>
+                        </div>
+                        <div class="commonness">
+                            ${renderStars(insect.commonness)}
+                        </div>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        // 渲染星级评分
+        function renderStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(rating)) {
+                    stars += '<i class="fas fa-star"></i>';
+                } else if (i - 0.5 <= rating) {
+                    stars += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    stars += '<i class="far fa-star"></i>';
+                }
+            }
+            return stars;
+        }
+
+        // 显示分类学网格
+        function displayTaxonomyGrid() {
+            taxonomyGrid.innerHTML = '';
+            orders.forEach(order => {
+                // 只显示有昆虫的目
+                if (order.count === 0) return;
+                
+                const card = document.createElement('div');
+                card.className = 'taxonomy-card';
+                card.innerHTML = `
+                    <div class="taxonomy-icon">
+                        <i class="fas fa-${order.icon}"></i>
+                    </div>
+                    <div class="taxonomy-info">
+                        <h3>${order.name}</h3>
+                        <p class="insect-count">${order.count}种昆虫</p>
+                        <p>${order.desc}</p>
+                    </div>
+                `;
+                taxonomyGrid.appendChild(card);
+                
+                // 添加点击事件
+                card.addEventListener('click', () => {
+                    filterInsectsByOrder(order.name);
+                });
+            });
+        }
+
+        // 按目筛选昆虫
+        function filterInsectsByOrder(orderName) {
+            // 更新状态
+            currentMode = 'order';
+            currentOrder = orderName;
+            
+            // 切换到随机浏览视图
+            showView(randomView);
+            randomLink.classList.add('active');
+            taxonomyLink.classList.remove('active');
+            
+            // 清空现有昆虫
+            randomInsects.innerHTML = '';
+            
+            // 筛选该目的昆虫
+            displayedOrderInsects = insects.filter(insect => 
+                insect.taxonomy.order.includes(orderName)
+            );
+            
+            if (displayedOrderInsects.length === 0) {
+                randomInsects.innerHTML = `<div class="no-insects">未找到${orderName}的昆虫记录</div>`;
+                loadMoreBtn.classList.add('no-more-btn');
+                loadMoreBtn.textContent = "没有更多内容";
+                loadMoreBtn.disabled = true;
+                return;
+            }
+            
+            // 显示前4个昆虫
+            const toShow = Math.min(4, displayedOrderInsects.length);
+            for (let i = 0; i < toShow; i++) {
+                const insectCard = createInsectCard(displayedOrderInsects[i]);
+                randomInsects.appendChild(insectCard);
+            }
+            
+            // 更新标题
+            document.querySelector('#random-view .section-title h2').textContent = `${orderName}昆虫 (${displayedOrderInsects.length}种)`;
+            
+            // 更新加载更多按钮
+            if (displayedOrderInsects.length <= 4) {
+                loadMoreBtn.classList.add('no-more-btn');
+                loadMoreBtn.textContent = "没有更多内容";
+                loadMoreBtn.disabled = true;
+            } else {
+                loadMoreBtn.classList.remove('no-more-btn');
+                loadMoreBtn.textContent = "加载更多昆虫";
+                loadMoreBtn.disabled = false;
+            }
+        }
+
+        // 加载更多昆虫
+        function loadMoreInsects() {
+            if (currentMode === 'random') {
+                // 随机模式：加载随机昆虫
+                displayRandomInsects(3);
+            } else if (currentMode === 'order') {
+                // 分类模式：加载当前目的更多昆虫
+                const currentCount = randomInsects.children.length;
+                const remaining = displayedOrderInsects.length - currentCount;
+                
+                if (remaining <= 0) {
+                    loadMoreBtn.classList.add('no-more-btn');
+                    loadMoreBtn.textContent = "没有更多内容";
+                    loadMoreBtn.disabled = true;
+                    return;
+                }
+                
+                const toShow = Math.min(3, remaining);
+                for (let i = currentCount; i < currentCount + toShow; i++) {
+                    const insectCard = createInsectCard(displayedOrderInsects[i]);
+                    randomInsects.appendChild(insectCard);
+                    
+                    // 添加淡入动画
+                    setTimeout(() => {
+                        insectCard.classList.add('fade-in');
+                    }, 100);
+                }
+                
+                // 检查是否还有更多
+                if (randomInsects.children.length >= displayedOrderInsects.length) {
+                    loadMoreBtn.classList.add('no-more-btn');
+                    loadMoreBtn.textContent = "没有更多内容";
+                    loadMoreBtn.disabled = true;
+                }
+            }
+        }
+
+        // 视图切换
+        function showView(view) {
+            randomView.style.display = 'none';
+            taxonomyView.style.display = 'none';
+            
+            view.style.display = 'block';
+        }
+
+        randomLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showView(randomView);
+            randomLink.classList.add('active');
+            taxonomyLink.classList.remove('active');
+            
+            // 重置状态
+            currentMode = 'random';
+            currentOrder = null;
+            
+            // 更新标题
+            document.querySelector('#random-view .section-title h2').textContent = '随机浏览';
+            
+            // 重置加载更多按钮
+            loadMoreBtn.classList.remove('no-more-btn');
+            loadMoreBtn.textContent = "加载更多昆虫";
+            loadMoreBtn.disabled = false;
+        });
+
+        taxonomyLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showView(taxonomyView);
+            taxonomyLink.classList.add('active');
+            randomLink.classList.remove('active');
+        });
+
+        // 加载更多按钮
+        loadMoreBtn.addEventListener('click', () => {
+            loadMoreInsects();
+        });
+
+        // 初始化页面
+        calculateOrderCounts();
+        calculateStatistics();
+        displayRandomInsects(4);
+        displayTaxonomyGrid();
+        showView(randomView);
+    </script>
+</body>
+</html>
